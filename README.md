@@ -2,9 +2,8 @@
 
 Client for the Xpo Feedback Center. Works in browsers and Node 18+; no dependencies.
 
-```bash
-npm install "github:xpodev/feedback-center#path:clients/typescript"   # or from your private registry
-```
+Publish it to your npm registry (`npm publish` in `clients/typescript`) and
+`npm install @xpo/feedback`, or build a tarball with `npm pack` and install that file.
 
 ```ts
 import { FeedbackClient, FeedbackError } from "@xpo/feedback";
