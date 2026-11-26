@@ -49,6 +49,11 @@ This adds `"@xpo/feedback": "github:xpodev/fbc-client-ts#v0.1.0"` to your
 import { FeedbackClient } from "@xpo/feedback";
 ```
 
+Always pin a release tag (see [CHANGELOG.md](CHANGELOG.md) for the latest), so an
+install gives the same code every time. To try unreleased changes, install
+`github:xpodev/fbc-client-ts#main` instead, but don't ship software that depends on
+`main`.
+
 The package is ESM-only. Bundlers (Vite, webpack, esbuild, Next.js) and Node's
 `import` handle it. From CommonJS on Node 18 or 20, use
 `const { FeedbackClient } = await import("@xpo/feedback")`; Node 22.12+ can also
