@@ -164,4 +164,23 @@ describe("FeedbackClient", () => {
     await new Promise((r) => setTimeout(r, 10));
     expect(f.calls[0].body).toMatchObject({ type: "Error", message: "boom" });
   });
+
+  it("sends Hebrew content intact", async () => {
+    const f = fakeFetch();
+    const c = client(f);
+    c.setUser({ name: "יעל כהן" });
+    await c.sendFeedback({ message: "הייצוא איטי מאוד", category: "באג", metadata: { מסך: "ייצוא" } });
+    await c.captureException(new Error("ערך לא חוקי בשדה 'כמות'"));
+    c.track("דוח_יוצא", { פורמט: "אקסל" });
+    await c.flush();
+    expect(f.calls[0].body).toMatchObject({ message: "הייצוא איטי מאוד", category: "באג", user: { name: "יעל כהן" }, metadata: { מסך: "ייצוא" } });
+    expect(f.calls[1].body.message).toBe("ערך לא חוקי בשדה 'כמות'");
+    expect(f.calls[2].body.events[0]).toMatchObject({ name: "דוח_יוצא", properties: { פורמט: "אקסל" } });
+  });
+
+  it("surfaces Hebrew error details from the server", async () => {
+    const f = fakeFetch([{ status: 400, body: { detail: "שגיאה בבקשה" } }]);
+    const err = await client(f).sendFeedback({ message: "x" }).catch((e) => e);
+    expect(err.message).toBe("400: שגיאה בבקשה");
+  });
 });
