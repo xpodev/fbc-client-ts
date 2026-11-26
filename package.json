@@ -2,6 +2,22 @@
   "name": "@xpo/feedback",
   "version": "0.1.0",
   "description": "Client for the Xpo Feedback Center: feedback, support requests, error reports and analytics. Works in browsers and Node 18+.",
+  "keywords": [
+    "feedback",
+    "error-reporting",
+    "crash-reporting",
+    "analytics",
+    "support"
+  ],
+  "homepage": "https://github.com/xpodev/fbc-client-ts#readme",
+  "bugs": {
+    "url": "https://github.com/xpodev/fbc-client-ts/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xpodev/fbc-client-ts.git"
+  },
+  "license": "UNLICENSED",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,13 +31,15 @@
     "dist"
   ],
   "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "prepare": "npm run build"
   },
-  "license": "UNLICENSED",
   "devDependencies": {
     "@types/node": "^22.20.7",
     "typescript": "^5.9.3",

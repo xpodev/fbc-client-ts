@@ -128,7 +128,6 @@ function defaultContext(): Record<string, unknown> {
   if (isBrowser) {
     return {
       platform: "web",
-      url: window.location?.href,
       locale: navigator.language,
       screen: `${window.screen?.width}x${window.screen?.height}`,
       sdk: SDK,
@@ -245,7 +244,9 @@ export class FeedbackClient {
   }
 
   private mergeContext(extra?: Record<string, unknown>): Record<string, unknown> {
-    return { ...this.context, ...extra };
+    // Single-page apps change URL without reloading, so read the current one per report.
+    const live = isBrowser && window.location ? { url: window.location.href } : {};
+    return { ...this.context, ...live, ...extra };
   }
 
   // ------------------------------------------------------------------ identity
@@ -395,7 +396,7 @@ export class FeedbackClient {
       while (this.queue.length) {
         const batch = this.queue.splice(0, 100);
         try {
-          await this.request("POST", "/events", { events: batch, context: this.context }, options.keepalive);
+          await this.request("POST", "/events", { events: batch, context: this.mergeContext() }, options.keepalive);
         } catch (err) {
           const status = err instanceof FeedbackError ? err.status : undefined;
           if (status !== undefined && status >= 400 && status < 500 && status !== 429) continue; // drop bad batch
